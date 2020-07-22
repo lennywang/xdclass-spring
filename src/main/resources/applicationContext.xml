@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+      https://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
+    <bean name="video" class="com.xdclass.domain.Video">
+        <property name="id" value="1"/>
+        <property name="title" value="spring"/>
+    </bean>
+
+    <bean  name="videoOrder" class="com.xdclass.domain.VideoOrder">
+        <property name="id" value="1"/>
+        <property name="outTradeNo" value="NO30003"/>
+        <property name="video" ref="video"/>
+    </bean>
+
+    <bean id="timeHandler" class="com.xdclass.aop.TimeHandler"/>
+    <bean id="videoService" class="com.xdclass.service.impl.VideoServiceImpl"/>
+
+    <aop:config>
+        <aop:aspect id="timeAspect" ref="timeHandler">
+            <aop:pointcut id="allMethodLogPointCut" expression="execution(* com.xdclass.service.VideoService.*(..))"/>
+
+            <aop:before method="printBefore" pointcut-ref="allMethodLogPointCut"/>
+            <aop:after method="printAfter" pointcut-ref="allMethodLogPointCut"/>
+        </aop:aspect>
+    </aop:config>
+</beans>
